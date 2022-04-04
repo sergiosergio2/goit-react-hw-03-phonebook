@@ -14,6 +14,7 @@ class App extends Component {
     ],
     filter: '',
   };
+   localStorageKey = "contact";
   formSubmitHandler = data => {
     if (
       !this.state.contacts.find(
@@ -41,6 +42,21 @@ class App extends Component {
     const { name, value } = evt.currentTarget;
     this.setState({ [name]: value });
   };
+  componentDidMount () {
+    const data = localStorage.getItem(this.localStorageKey);
+    if(!data) {
+      return
+    }
+    this.setState({
+      contacts: JSON.parse(data),
+    })
+  };
+
+  componentDidUpdate (prevState) {
+    if(prevState.contacts !== this.state.contacts) {
+      localStorage.setItem(this.localStorageKey, JSON.stringify(this.state.contacts));
+    }
+  }
 
   render() {
     return (
